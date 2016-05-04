@@ -1,0 +1,39 @@
+consul:
+    hostname: consul
+    container_name: consul
+    image: qnib/alpn-consul
+    environment:
+    - DC_NAME=dc1
+    - CONSUL_BOOTSTRAP_EXPECT=1
+    ports:
+    - "8500:8500"
+    dns: 127.0.0.1
+
+zkui:
+    hostname: zkui
+    container_name: zkui
+    image: qnib/alpn-zkui
+    dns: 127.0.0.1
+    environment:
+    - DC_NAME=dc1
+    links:
+    - consul:consul
+    ports:
+    - 9090:9090
+    privileged: true
+
+zookeeper:
+    hostname: zookeeper
+    container_name: zookeeper
+    image: qnib/alpn-zookeeper
+    dns: 127.0.0.1
+    environment:
+    - DC_NAME=dc1
+    - MYID=1
+    - SERVERS=zookeeper.node.dc1.consul
+    links:
+    - consul:consul
+    ports:
+    - 2181:2181
+    privileged: true
+
