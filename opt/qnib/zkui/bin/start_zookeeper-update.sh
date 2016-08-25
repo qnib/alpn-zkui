@@ -1,5 +1,8 @@
 #!/bin/bash
 
+source /opt/qnib/consul/etc/bash_functions.sh
+wait_for_srv consul-http
+
 if [ "X${ZK_DC}" != "X" ];then
     sed -i'' -E "s#service \"zookeeper(@\w+)?\"#service \"zookeeper@${ZK_DC}\"#" /etc/consul-templates/zkui.conf.ctmpl
 fi
